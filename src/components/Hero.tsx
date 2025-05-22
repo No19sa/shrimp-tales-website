@@ -33,7 +33,7 @@ const Hero = () => {
                 </Link>
               </Button>
               
-              <Button asChild variant="outline" className="border-white text-white hover:bg-aqua-700/20 text-lg px-6 py-3 h-auto">
+              <Button asChild variant="outline" className="border-white text-aqua-200 hover:bg-aqua-700/20 text-lg px-6 py-3 h-auto">
                 <Link to="/care-guide">
                   Care Guides
                 </Link>
