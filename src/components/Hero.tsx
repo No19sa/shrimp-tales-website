@@ -69,7 +69,7 @@ const Hero = () => {
               <div className="absolute -top-4 -right-4 bg-white rounded-lg p-3 shadow-lg">
                 <div className="text-center">
                   <p className="text-xs text-gray-600">Starting at</p>
-                  <p className="text-aqua-600 text-lg font-bold">₹99
+                  <p className="text-aqua-600 font-bold text-2xl">₹99
                 </p>
                 </div>
               </div>
