@@ -1,16 +1,15 @@
-
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-
 const Hero = () => {
-  return (
-    <div className="relative bg-gradient-to-r from-aqua-800 to-teal-700 overflow-hidden">
+  return <div className="relative bg-gradient-to-r from-aqua-800 to-teal-700 overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-water-pattern"></div>
       
       <div className="absolute -top-16 -right-16 w-64 h-64 bg-aqua-500 rounded-full opacity-20 animate-float"></div>
-      <div className="absolute top-32 -left-16 w-48 h-48 bg-teal-500 rounded-full opacity-20 animate-float" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute top-32 -left-16 w-48 h-48 bg-teal-500 rounded-full opacity-20 animate-float" style={{
+      animationDelay: '1s'
+    }}></div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
         <div className="flex flex-col md:flex-row items-center">
@@ -50,11 +49,7 @@ const Hero = () => {
           <div className="md:w-1/2 md:pl-10">
             <div className="relative">
               <div className="rounded-lg overflow-hidden shadow-2xl border-4 border-white/20">
-                <img 
-                  src="https://images.unsplash.com/photo-1535591273668-578e31182c4f?q=80&w=1000&auto=format&fit=crop"
-                  alt="Colorful Neocaridina shrimps in aquarium" 
-                  className="w-full h-auto"
-                />
+                <img src="https://images.unsplash.com/photo-1535591273668-578e31182c4f?q=80&w=1000&auto=format&fit=crop" alt="Colorful Neocaridina shrimps in aquarium" className="w-full h-auto" />
               </div>
               
               <div className="absolute -bottom-4 -left-4 bg-white rounded-lg p-3 shadow-lg">
@@ -66,7 +61,7 @@ const Hero = () => {
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Featured Products</p>
-                    <p className="font-medium">Cherry Red Shrimps</p>
+                    <p className="font-medium">Painted Fire Red Shrimps</p>
                   </div>
                 </div>
               </div>
@@ -74,15 +69,14 @@ const Hero = () => {
               <div className="absolute -top-4 -right-4 bg-white rounded-lg p-3 shadow-lg">
                 <div className="text-center">
                   <p className="text-xs text-gray-600">Starting at</p>
-                  <p className="text-xl font-bold text-aqua-600">$19.99</p>
+                  <p className="text-aqua-600 font-bold text-base">₹99
+                </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Hero;
