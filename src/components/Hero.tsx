@@ -49,7 +49,7 @@ const Hero = () => {
           <div className="md:w-1/2 md:pl-10">
             <div className="relative">
               <div className="rounded-lg overflow-hidden shadow-2xl border-4 border-white/20">
-                <img src="https://images.unsplash.com/photo-1535591273668-578e31182c4f?q=80&w=1000&auto=format&fit=crop" alt="Colorful Neocaridina shrimps in aquarium" className="w-full h-auto" />
+                <img alt="Colorful Neocaridina shrimps in aquarium" className="w-full h-auto" src="/lovable-uploads/622dd637-1e9b-4fc0-b7b0-5a4a2419a4a0.jpg" />
               </div>
               
               <div className="absolute -bottom-4 -left-4 bg-white rounded-lg p-3 shadow-lg">
