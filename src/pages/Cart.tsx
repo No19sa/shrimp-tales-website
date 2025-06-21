@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuthUser } from '@/hooks/useAuthUser';
 import { fetchUserCart } from '@/lib/supabaseData';
 import { updateCartItemQuantity, removeCartItem } from '@/lib/cartActions';
+import { placeOrder } from '@/lib/orderActions';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
@@ -55,9 +56,26 @@ const Cart = () => {
     }
   };
 
+  const handlePlaceOrder = async () => {
+    if (!user) return;
+    setUpdating(true);
+    setError('');
+    try {
+      await placeOrder(user.id, cartItems);
+      setCartItems([]);
+      alert('Order placed successfully!');
+    } catch (e) {
+      setError('Failed to place order.');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
-      <NavBar />
+      <div className="hidden md:block">
+        <NavBar />
+      </div>
       <main className="flex-grow container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
         {loading ? (
@@ -96,7 +114,7 @@ const Cart = () => {
             </ul>
             <div className="flex justify-between items-center mt-8 border-t pt-4">
               <div className="text-xl font-bold">Grand Total: ₹{cartItems.reduce((sum, item) => sum + item.fish_products.price * item.quantity, 0).toFixed(2)}</div>
-              <button className="bg-aqua-600 text-white px-6 py-2 rounded hover:bg-aqua-700 transition-colors font-semibold text-lg" disabled={updating}>Proceed to Checkout</button>
+              <button className="bg-aqua-600 text-white px-6 py-2 rounded hover:bg-aqua-700 transition-colors font-semibold text-lg" disabled={updating} onClick={handlePlaceOrder}>Proceed to Checkout</button>
             </div>
           </div>
         )}

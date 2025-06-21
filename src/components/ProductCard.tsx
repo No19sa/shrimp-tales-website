@@ -106,11 +106,11 @@ const ProductCard = ({
         <div className="flex items-center">
           {discountPrice ? (
             <>
-              <span className="text-lg font-bold text-primary">${discountPrice.toFixed(2)}</span>
+              <span className="text-lg font-bold text-primary">₹{discountPrice.toFixed(2)}</span>
               <span className="ml-2 text-sm text-gray-500 line-through">${price.toFixed(2)}</span>
             </>
           ) : (
-            <span className="text-lg font-bold text-primary">${price.toFixed(2)}</span>
+            <span className="text-lg font-bold text-primary">₹{price.toFixed(2)}</span>
           )}
         </div>
         <div className="mt-2 text-sm text-gray-500">
@@ -123,22 +123,26 @@ const ProductCard = ({
           <Button 
             asChild
             variant="outline"
-            className="w-1/2"
+            className="w-1/2 min-w-0 text-xs sm:text-sm px-1 sm:px-2 whitespace-nowrap overflow-hidden text-ellipsis"
           >
-            <Link to={`/shop/${id}`}>View More</Link>
+            <Link to={`/shop/${id}`}>
+              <span className="block sm:hidden">More</span>
+              <span className="hidden sm:block">View More</span>
+            </Link>
           </Button>
           {typeof cartItems !== 'undefined' && cartItems[id] > 0 ? (
-            <div className="w-1/2 flex items-center justify-center gap-2">
-              <span className="text-primary font-semibold">Qty: {cartItems[id]}</span>
+            <div className="w-1/2 flex items-center justify-center gap-2 min-w-0">
+              <span className="text-primary font-semibold text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis">Qty: {cartItems[id]}</span>
             </div>
           ) : (
             <Button 
               onClick={handleAddToCart} 
-              className="w-1/2"
+              className="w-1/2 min-w-0 text-xs sm:text-sm px-1 sm:px-2 whitespace-nowrap overflow-hidden text-ellipsis"
               disabled={stock === 0}
             >
               <ShoppingCart className="w-4 h-4 mr-2" />
-              Add to Cart
+              <span className="block sm:hidden">Add</span>
+              <span className="hidden sm:block">Add to Cart</span>
             </Button>
           )}
         </div>

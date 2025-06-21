@@ -62,7 +62,7 @@ const Index = () => {
               </Button>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {featuredProducts.map(product => (
                 <ProductCard
                   key={product.id}
@@ -80,7 +80,7 @@ const Index = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="section-heading text-center mx-auto">Why Choose Our Shrimp</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mt-10">
               <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                 <div className="h-14 w-14 bg-aqua-100 rounded-full flex items-center justify-center mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-aqua-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -132,7 +132,7 @@ const Index = () => {
               </Button>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {newArrivals.map(product => (
                 <ProductCard
                   key={product.id}
@@ -165,7 +165,7 @@ const Index = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="section-heading text-center mx-auto mb-10">What Our Customers Say</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {testimonials.map(testimonial => (
                 <TestimonialCard key={testimonial.id} {...testimonial} />
               ))}
@@ -185,7 +185,7 @@ const Index = () => {
               </Button>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {blogPosts.map(post => (
                 <Link key={post.id} to={`/care-guide/${post.id}`} className="card-hover">
                   <div className="bg-white rounded-lg overflow-hidden shadow-sm h-full flex flex-col">

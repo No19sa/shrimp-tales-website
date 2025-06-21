@@ -85,7 +85,7 @@ function SignUpForm() {
           phone,
           address,
           created_at: new Date().toISOString(),
-          role: 'customer',
+          role: 'admin',
         },
       },
     });

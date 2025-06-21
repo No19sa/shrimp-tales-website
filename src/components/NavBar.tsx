@@ -54,6 +54,11 @@ const NavBar = () => {
               <Link to="/contact" className={`nav-link ${isActive('/contact') ? 'nav-link-active' : ''}`}>
                 Contact
               </Link>
+              {user?.user_metadata?.role === 'admin' && (
+                <Link to="/dashboard" className={`nav-link ${isActive('/dashboard') ? 'nav-link-active' : ''}`}>
+                  Dashboard
+                </Link>
+              )}
             </div>
           </div>
           <div className="hidden md:flex items-center space-x-4">
@@ -64,15 +69,16 @@ const NavBar = () => {
                 </Badge>}
             </Button>
             {/* Account Icon and Menu */}
-            <div className="relative group">
+            <div className="relative group" tabIndex={0}>
               <Button variant="ghost" className="flex items-center">
                 <UserCircle className="h-6 w-6 mr-1" />
                 {user ? <span className="font-medium">Hi! {getFirstName()}</span> : <span>Account</span>}
               </Button>
-              <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50">
+              <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg opacity-0 pointer-events-none transition-opacity z-50 group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto">
                 {user ? (
                   <div className="p-2">
                     <div className="mb-2 text-sm text-gray-700">{getFirstName()}</div>
+                    <Link to="/orders" className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 mb-1">My Orders</Link>
                     <SignOut />
                   </div>
                 ) : (
@@ -84,15 +90,13 @@ const NavBar = () => {
             </div>
           </div>
           <div className="md:hidden flex items-center">
-            <Button variant="ghost" onClick={() => navigate('/cart')} className="inline-flex items-center justify-center p-2">
-              <div className="flex items-center space-x-2">
-                <div className="relative">
-                  <ShoppingCart className="h-5 w-5" />
-                  {cartCount > 0 && <Badge className="absolute -top-2 -right-2 bg-aqua-500 text-white h-5 w-5 flex items-center justify-center p-0 rounded-full">
-                      {cartCount}
-                    </Badge>}
-                </div>
-                <Menu className="h-6 w-6" />
+            <Button variant="ghost" onClick={toggleMenu} className="inline-flex items-center justify-center p-2">
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+            <Button variant="ghost" onClick={() => navigate('/cart')} className="inline-flex items-center justify-center p-2 ml-2">
+              <div className="relative">
+                <ShoppingCart className="h-5 w-5" />
+                {cartCount > 0 && <Badge className="absolute -top-2 -right-2 bg-aqua-500 text-white h-5 w-5 flex items-center justify-center p-0 rounded-full">{cartCount}</Badge>}
               </div>
             </Button>
           </div>
@@ -117,8 +121,49 @@ const NavBar = () => {
           <Link to="/contact" className={`block nav-link ${isActive('/contact') ? 'nav-link-active' : ''}`} onClick={() => setIsOpen(false)}>
             Contact
           </Link>
+          {user?.user_metadata?.role === 'admin' && (
+            <Link to="/dashboard" className={`block nav-link ${isActive('/dashboard') ? 'nav-link-active' : ''}`} onClick={() => setIsOpen(false)}>
+              Dashboard
+            </Link>
+          )}
         </div>
       </div>
+
+      {/* Side Navigation Panel for Mobile */}
+      <div className={`fixed inset-0 z-50 bg-black bg-opacity-40 transition-opacity ${isOpen ? 'block' : 'hidden'}`} onClick={toggleMenu} />
+      <aside className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden`}
+        style={{ willChange: 'transform' }}
+        aria-label="Mobile Navigation"
+      >
+        <div className="flex items-center justify-between p-4 border-b">
+          <span className="text-aqua-600 font-bold text-2xl">JalPearl</span>
+          <Button variant="ghost" onClick={toggleMenu} className="p-2">
+            <X className="h-6 w-6" />
+          </Button>
+        </div>
+        <nav className="flex flex-col p-4 space-y-2">
+          <Link to="/" className={`nav-link ${isActive('/') ? 'nav-link-active' : ''}`} onClick={toggleMenu}>Home</Link>
+          <Link to="/shop" className={`nav-link ${isActive('/shop') ? 'nav-link-active' : ''}`} onClick={toggleMenu}>Shop</Link>
+          <Link to="/care-guide" className={`nav-link ${isActive('/care-guide') ? 'nav-link-active' : ''}`} onClick={toggleMenu}>Care Guide</Link>
+          <Link to="/about" className={`nav-link ${isActive('/about') ? 'nav-link-active' : ''}`} onClick={toggleMenu}>About</Link>
+          <Link to="/contact" className={`nav-link ${isActive('/contact') ? 'nav-link-active' : ''}`} onClick={toggleMenu}>Contact</Link>
+          {user?.user_metadata?.role === 'admin' && (
+            <Link to="/dashboard" className={`nav-link ${isActive('/dashboard') ? 'nav-link-active' : ''}`} onClick={toggleMenu}>
+              Dashboard
+            </Link>
+          )}
+          <div className="mt-4 border-t pt-4">
+            {user ? (
+              <div className="flex flex-col gap-2">
+                <span className="text-gray-700 text-sm mb-2">Hi! {getFirstName()}</span>
+                <SignOut />
+              </div>
+            ) : (
+              <Button className="w-full" onClick={() => { toggleMenu(); navigate('/auth'); }}>Sign In / Sign Up</Button>
+            )}
+          </div>
+        </nav>
+      </aside>
     </nav>;
 };
 
