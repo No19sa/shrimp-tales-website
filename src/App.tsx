@@ -11,6 +11,7 @@ import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
 import Cart from "./pages/Cart";
+import ProductDetails from "./pages/ProductDetails";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/shop/:id" element={<ProductDetails />} />
           <Route path="/care-guide" element={<CareGuide />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />

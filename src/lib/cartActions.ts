@@ -15,3 +15,4 @@ export async function removeCartItem(cartItemId) {
     .eq('id', cartItemId);
   if (error) throw error;
 }
+
