@@ -1,17 +1,21 @@
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Download } from 'lucide-react';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { blogPosts } from '@/lib/data';
+import { fetchBlogPosts } from '@/lib/supabaseContent';
 
 const CareGuide = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
-  
+  const [blogPosts, setBlogPosts] = useState([]);
+
+  useEffect(() => {
+    fetchBlogPosts().then(setBlogPosts).catch(console.error);
+  }, []);
+
   // Get unique categories from blog posts
   const categories = ['all', ...new Set(blogPosts.map(post => post.category))];
   

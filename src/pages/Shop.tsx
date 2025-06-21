@@ -1,15 +1,33 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import ShopFilters from '@/components/ShopFilters';
-import { products, productCategories, productColors } from '@/lib/data';
+import { fetchFishProducts, addToCart } from '@/lib/supabaseData';
+import { useAuthUser } from '@/hooks/useAuthUser';
+
+const productCategories = [
+  'shrimp',
+  'fish',
+  'food',
+  'care',
+  'combo',
+];
+const productColors = [
+  'red',
+  'blue',
+  'yellow',
+  'brown',
+  'green',
+  'multicolor',
+];
 
 const Shop = () => {
   const location = useLocation();
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const user = useAuthUser();
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilters, setActiveFilters] = useState<any>({
     categories: [],
@@ -17,6 +35,7 @@ const Shop = () => {
     priceRange: [0, 100],
   });
   const [sortBy, setSortBy] = useState('featured');
+  const [cartItems, setCartItems] = useState<{ [productId: string]: number }>({});
   
   // Get category from URL query if available
   useEffect(() => {
@@ -30,6 +49,14 @@ const Shop = () => {
       }));
     }
   }, [location.search]);
+  
+  // Fetch products from Supabase
+  useEffect(() => {
+    fetchFishProducts().then(data => {
+      setProducts(data || []);
+      setFilteredProducts(data || []);
+    }).catch(console.error);
+  }, []);
   
   // Filter products based on active filters and search term
   useEffect(() => {
@@ -85,7 +112,7 @@ const Shop = () => {
     }
     
     setFilteredProducts(result);
-  }, [activeFilters, searchTerm, sortBy]);
+  }, [products, activeFilters, searchTerm, sortBy]);
   
   const handleFilterChange = (filters: any) => {
     setActiveFilters(filters);
@@ -95,8 +122,20 @@ const Shop = () => {
     setSortBy(e.target.value);
   };
   
-  const handleAddToCart = (productId: string) => {
-    console.log(`Added product ${productId} to cart`);
+  const handleAddToCart = async (productId: string) => {
+    if (!user) {
+      alert('Please sign in to add items to your cart.');
+      return;
+    }
+    try {
+      await addToCart(user.id, productId);
+      setCartItems(prev => ({
+        ...prev,
+        [productId]: (prev[productId] || 0) + 1
+      }));
+    } catch (err) {
+      alert('Failed to add to cart.');
+    }
   };
   
   return (
@@ -172,6 +211,7 @@ const Shop = () => {
                         key={product.id}
                         {...product}
                         onAddToCart={handleAddToCart}
+                        cartItems={cartItems}
                       />
                     ))}
                   </div>

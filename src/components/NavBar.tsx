@@ -1,18 +1,34 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ShoppingCart } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, ShoppingCart, UserCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useAuthUser } from '@/hooks/useAuthUser';
+import { SignOut } from './Auth';
+
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const [cartCount, setCartCount] = useState(0);
+  const user = useAuthUser();
+  const navigate = useNavigate();
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
   const isActive = (path: string) => {
     return location.pathname === path;
   };
+
+  // Helper to get first name from user metadata
+  const getFirstName = () => {
+    if (user && user.user_metadata && user.user_metadata.full_name) {
+      return user.user_metadata.full_name.split(' ')[0];
+    }
+    return null;
+  };
+
   return <nav className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -40,25 +56,44 @@ const NavBar = () => {
               </Link>
             </div>
           </div>
-          <div className="hidden md:flex items-center">
-            <Button variant="ghost" className="relative">
+          <div className="hidden md:flex items-center space-x-4">
+            <Button variant="ghost" className="relative" onClick={() => navigate('/cart')}>
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && <Badge className="absolute -top-2 -right-2 bg-aqua-500 text-white h-5 w-5 flex items-center justify-center p-0 rounded-full">
                   {cartCount}
                 </Badge>}
             </Button>
+            {/* Account Icon and Menu */}
+            <div className="relative group">
+              <Button variant="ghost" className="flex items-center">
+                <UserCircle className="h-6 w-6 mr-1" />
+                {user ? <span className="font-medium">Hi! {getFirstName()}</span> : <span>Account</span>}
+              </Button>
+              <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50">
+                {user ? (
+                  <div className="p-2">
+                    <div className="mb-2 text-sm text-gray-700">{getFirstName()}</div>
+                    <SignOut />
+                  </div>
+                ) : (
+                  <div className="p-2">
+                    <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100" onClick={() => navigate('/auth')}>Sign In / Sign Up</button>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
           <div className="md:hidden flex items-center">
-            <Button variant="ghost" onClick={toggleMenu} className="inline-flex items-center justify-center p-2">
-              {isOpen ? <X className="h-6 w-6" /> : <div className="flex items-center space-x-2">
-                  <div className="relative">
-                    <ShoppingCart className="h-5 w-5" />
-                    {cartCount > 0 && <Badge className="absolute -top-2 -right-2 bg-aqua-500 text-white h-5 w-5 flex items-center justify-center p-0 rounded-full">
-                        {cartCount}
-                      </Badge>}
-                  </div>
-                  <Menu className="h-6 w-6" />
-                </div>}
+            <Button variant="ghost" onClick={() => navigate('/cart')} className="inline-flex items-center justify-center p-2">
+              <div className="flex items-center space-x-2">
+                <div className="relative">
+                  <ShoppingCart className="h-5 w-5" />
+                  {cartCount > 0 && <Badge className="absolute -top-2 -right-2 bg-aqua-500 text-white h-5 w-5 flex items-center justify-center p-0 rounded-full">
+                      {cartCount}
+                    </Badge>}
+                </div>
+                <Menu className="h-6 w-6" />
+              </div>
             </Button>
           </div>
         </div>
@@ -86,4 +121,5 @@ const NavBar = () => {
       </div>
     </nav>;
 };
+
 export default NavBar;

@@ -93,7 +93,7 @@ const Contact = () => {
                     <div className="ml-4">
                       <p className="text-sm font-medium text-aqua-100">Phone</p>
                       <a href="tel:+1-234-567-8900" className="hover:underline">
-                        (123) 456-7890
+                        000000
                       </a>
                     </div>
                   </div>
@@ -183,7 +183,7 @@ const Contact = () => {
                         type="tel"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="(123) 456-7890"
+                        placeholder="000000"
                       />
                     </div>
                     

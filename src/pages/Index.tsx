@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,18 +7,40 @@ import ProductCard from '@/components/ProductCard';
 import TestimonialCard from '@/components/TestimonialCard';
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
-import { products, testimonials, blogPosts } from '@/lib/data';
+import { fetchFishProducts, addToCart } from '@/lib/supabaseData';
+import { fetchTestimonials, fetchBlogPosts } from '@/lib/supabaseContent';
+import { useAuthUser } from '@/hooks/useAuthUser';
 
 const Index = () => {
-  const [cartItems, setCartItems] = useState<string[]>([]);
+  const user = useAuthUser();
+  const [cartItems, setCartItems] = useState<{ [productId: string]: number }>({});
+  const [products, setProducts] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [blogPosts, setBlogPosts] = useState([]);
+
+  useEffect(() => {
+    fetchFishProducts().then(data => setProducts(data || [])).catch(console.error);
+    fetchTestimonials().then(setTestimonials).catch(console.error);
+    fetchBlogPosts().then(setBlogPosts).catch(console.error);
+  }, []);
+
+  const featuredProducts = products.filter(product => product.is_featured);
+  const newArrivals = products.filter(product => product.is_new_arrival);
   
-  const featuredProducts = products.filter(product => product.isFeatured);
-  const newArrivals = products.filter(product => product.isNewArrival);
-  
-  const handleAddToCart = (productId: string) => {
-    setCartItems(prev => [...prev, productId]);
-    // Show toast notification here
-    console.log(`Added product ${productId} to cart`);
+  const handleAddToCart = async (productId: string) => {
+    if (!user) {
+      alert('Please sign in to add items to your cart.');
+      return;
+    }
+    try {
+      await addToCart(user.id, productId);
+      setCartItems(prev => ({
+        ...prev,
+        [productId]: (prev[productId] || 0) + 1
+      }));
+    } catch (err) {
+      alert('Failed to add to cart.');
+    }
   };
 
   return (
@@ -47,6 +68,7 @@ const Index = () => {
                   key={product.id}
                   {...product}
                   onAddToCart={handleAddToCart}
+                  cartItems={cartItems}
                 />
               ))}
             </div>
@@ -116,6 +138,7 @@ const Index = () => {
                   key={product.id}
                   {...product}
                   onAddToCart={handleAddToCart}
+                  cartItems={cartItems}
                 />
               ))}
             </div>

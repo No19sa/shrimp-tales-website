@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Star } from 'lucide-react';
@@ -25,6 +24,7 @@ interface ProductCardProps {
   isNewArrival?: boolean;
   stock: number;
   onAddToCart?: (id: string) => void;
+  cartItems?: { [key: string]: number };
 }
 
 const ProductCard = ({ 
@@ -38,7 +38,8 @@ const ProductCard = ({
   isFeatured = false,
   isNewArrival = false,
   stock,
-  onAddToCart 
+  onAddToCart,
+  cartItems
 }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   
@@ -117,15 +118,30 @@ const ProductCard = ({
         </div>
       </CardContent>
       
-      <CardFooter className="p-4 pt-0">
-        <Button 
-          onClick={handleAddToCart} 
-          className="w-full"
-          disabled={stock === 0}
-        >
-          <ShoppingCart className="w-4 h-4 mr-2" />
-          Add to Cart
-        </Button>
+      <CardFooter className="p-4 pt-0 flex flex-col gap-2">
+        <div className="flex gap-2 w-full">
+          <Button 
+            asChild
+            variant="outline"
+            className="w-1/2"
+          >
+            <Link to={`/shop/${id}`}>View More</Link>
+          </Button>
+          {typeof cartItems !== 'undefined' && cartItems[id] > 0 ? (
+            <div className="w-1/2 flex items-center justify-center gap-2">
+              <span className="text-primary font-semibold">Qty: {cartItems[id]}</span>
+            </div>
+          ) : (
+            <Button 
+              onClick={handleAddToCart} 
+              className="w-1/2"
+              disabled={stock === 0}
+            >
+              <ShoppingCart className="w-4 h-4 mr-2" />
+              Add to Cart
+            </Button>
+          )}
+        </div>
       </CardFooter>
     </Card>
   );
