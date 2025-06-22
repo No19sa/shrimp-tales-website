@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
 export function useDashboardData() {
-  const [overview, setOverview] = useState({ totalSales: 0, totalOrders: 0, totalRevenue: 0, topProducts: [], lowStock: [], recentOrders: [], customers: 0 });
+  const [overview, setOverview] = useState<{ totalSales: number; totalOrders: number; totalRevenue: number; lowStock: any[]; recentOrders: any[]; customers: number; }>(
+    { totalSales: 0, totalOrders: 0, totalRevenue: 0, lowStock: [], recentOrders: [], customers: 0 }
+  );
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +40,7 @@ export function useDashboardData() {
       // if (productsData) {
       //   topProducts = [...productsData].sort((a, b) => (productSales[b.id] || 0) - (productSales[a.id] || 0)).slice(0, 5);
       // }
-      setOverview({ totalSales, totalOrders, totalRevenue, /*topProducts,*/ lowStock, recentOrders, customers });
+      setOverview({ totalSales, totalOrders, totalRevenue, lowStock, recentOrders, customers });
       setOrders(ordersData || []);
       setProducts(productsData || []);
       setLoading(false);

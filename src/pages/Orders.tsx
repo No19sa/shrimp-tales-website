@@ -10,17 +10,26 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      supabase
-        .from('orders')
-        .select('*, order_items(*, fish_products(*))')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .then(({ data }) => setOrders(data || []))
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+    const fetchOrders = async () => {
+      if (user) {
+        setLoading(true);
+        try {
+          const { data } = await supabase
+            .from('orders')
+            .select('*, order_items(*, fish_products(*))')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false });
+          setOrders(data || []);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
   }, [user]);
 
   if (!user) return <div className="min-h-screen flex items-center justify-center">Please sign in to view your orders.</div>;
